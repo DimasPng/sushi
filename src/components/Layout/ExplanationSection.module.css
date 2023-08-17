@@ -1,0 +1,23 @@
+.explanation {
+
+}
+
+.explanation__text-block {
+    max-width: 80rem;
+    border-radius: .5rem;
+    background-color: #393839;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.explanation__text-block__title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+}
