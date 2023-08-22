@@ -4,14 +4,24 @@ import ExplanationSection from "./components/Layout/ExplanationSection";
 import Lists from "./components/Layout/Lists";
 import { productsData } from "./data/data.js";
 import Product from "./components/Layout/Product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cart from "./components/Layout/Cart";
 import ProductPopup from "./components/Layout/ProductPopup";
 export default App;
 
+const calcSum = function (arr) {
+  return arr.reduce((acc, item) => (acc += item.amount * item.price), 0);
+};
+
 function App() {
   const [order, setOrder] = useState([]);
-  console.log(order);
+  const [totalSum, setTotalSum] = useState(0);
+
+  useEffect(() => {
+    if (order.length > 0) {
+      setTotalSum(calcSum(order));
+    }
+  }, [order]);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -33,13 +43,13 @@ function App() {
             key={item.id}
             title={item.title}
             description={item.description}
-            price={item.price}
+            price={Number(item.price)}
             order={order}
             setOrder={setOrder}
           />
         ))}
       </Lists>
-      <Cart isOpen={isCartOpen} closeCart={handleCloseCart}>
+      <Cart isOpen={isCartOpen} closeCart={handleCloseCart} totalSum={totalSum}>
         {order.length > 0 ? (
           order.map((item) => (
             <ProductPopup
@@ -48,6 +58,8 @@ function App() {
               description={item.description}
               price={item.price}
               amount={item.amount}
+              order={order}
+              setOrder={setOrder}
             />
           ))
         ) : (

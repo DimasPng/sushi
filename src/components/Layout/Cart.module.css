@@ -28,3 +28,10 @@
     font-size: 20px;
     cursor: pointer;
 }
+
+.cart-sum {
+    font-size: 2rem;
+    position: absolute;
+    right: 35px;
+    font-weight: bold;
+}

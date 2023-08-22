@@ -1,6 +1,6 @@
 import styles from "./Cart.module.css";
 
-const Cart = ({ isOpen, closeCart, children }) => {
+const Cart = ({ isOpen, closeCart, children, totalSum }) => {
   if (!isOpen) {
     return null;
   }
@@ -15,6 +15,9 @@ const Cart = ({ isOpen, closeCart, children }) => {
           ✖
         </button>
         {children}
+        {Array.isArray(children) && (
+          <p className={styles["cart-sum"]}>Итого: {totalSum} $</p>
+        )}
       </div>
     </div>
   );

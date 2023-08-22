@@ -33,7 +33,7 @@ const Product = ({ title, description, price, order, setOrder }) => {
         <div className={styles["product__text"]}>
           <h2 className={styles["product__title"]}>{title}</h2>
           <p className={styles["product__description"]}>{description}</p>
-          <p className={styles["product__price"]}>{price}</p>
+          <p className={styles["product__price"]}>$ {price}</p>
         </div>
         <div className={styles["product__elements"]}>
           <label className={styles["product__label"]}>
