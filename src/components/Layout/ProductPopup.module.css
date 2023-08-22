@@ -1,0 +1,28 @@
+.product-popup {
+    margin-top: 2rem;
+}
+
+.product-popup__wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.product-popup__title {
+    font-size: 2.2rem;
+}
+
+.product-popup__description {
+    font-size: 1.8rem;
+}
+
+.product-popup__price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ab6939;
+}
+
+.product-popup__quantity {
+    text-align: center;
+    font-size: 2rem;
+}
