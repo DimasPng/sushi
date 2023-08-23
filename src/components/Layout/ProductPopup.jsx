@@ -1,7 +1,8 @@
 import styles from "./ProductPopup.module.css";
 
 const sum = function (amount, price) {
-  return amount * price;
+  console.log("render sum in product popup");
+  return parseFloat((amount * price).toFixed(2));
 };
 
 const ProductPopup = ({
@@ -18,6 +19,16 @@ const ProductPopup = ({
     const newOrder = order.filter((item) => item.title !== title);
     setOrder(newOrder);
   };
+  const updateItemQuantity = (quantity) => {
+    const updateCard = order.map((item) => {
+      if (item.title === title) {
+        return { ...item, amount: quantity };
+      }
+      return item;
+    });
+
+    setOrder(updateCard);
+  };
 
   return (
     <div className={styles["product-popup"]}>
@@ -30,6 +41,20 @@ const ProductPopup = ({
         <div className={styles["product-popup__quantity"]}>
           <p className={styles["product-popup__info"]}>
             Количество: {amount}
+            <span
+              className={styles["product-popup__more"]}
+              onClick={() => updateItemQuantity(amount + 1)}
+            >
+              +
+            </span>
+            {amount > 1 && (
+              <span
+                className={styles["product-popup__less"]}
+                onClick={() => updateItemQuantity(amount - 1)}
+              >
+                -
+              </span>
+            )}
             <br />
             Сумма: {totalSum} $
           </p>

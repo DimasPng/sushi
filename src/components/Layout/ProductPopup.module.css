@@ -32,6 +32,18 @@
     margin-bottom: .5rem;
 }
 
+.product-popup__more {
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: .5rem;
+    margin-right: 1rem;
+}
+
+.product-popup__less {
+    cursor: pointer;
+    font-weight: bold;
+}
+
 .product-popup__button {
     width: 13rem;
     height: 3rem;

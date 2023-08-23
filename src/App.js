@@ -10,7 +10,10 @@ import ProductPopup from "./components/Layout/ProductPopup";
 export default App;
 
 const calcSum = function (arr) {
-  return arr.reduce((acc, item) => (acc += item.amount * item.price), 0);
+  console.log("render calcSum in App");
+  return arr
+    .reduce((acc, item) => (acc += item.amount * item.price), 0)
+    .toFixed(2);
 };
 
 function App() {
@@ -26,11 +29,7 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleOpenCart = () => {
-    setIsCartOpen(true);
-  };
-
-  const handleCloseCart = () => {
-    setIsCartOpen(false);
+    setIsCartOpen(!isCartOpen);
   };
 
   return (
@@ -49,7 +48,7 @@ function App() {
           />
         ))}
       </Lists>
-      <Cart isOpen={isCartOpen} closeCart={handleCloseCart} totalSum={totalSum}>
+      <Cart isOpen={isCartOpen} closeCart={handleOpenCart} totalSum={totalSum}>
         {order.length > 0 ? (
           order.map((item) => (
             <ProductPopup
