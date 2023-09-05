@@ -3,13 +3,15 @@ import Header from "./components/Layout/Header";
 import ExplanationSection from "./components/Layout/ExplanationSection";
 import Lists from "./components/Layout/Lists";
 import Product from "./components/Layout/Product";
-import { useEffect, useMemo, useReducer } from "react";
+import { createContext, useEffect, useMemo, useReducer } from "react";
 import Cart from "./components/Layout/Cart";
 import ProductPopup from "./components/Layout/ProductPopup";
 import { getMeals } from "./api.ts";
 import { ORDER, TOTAL_SUM, MEALS, ISCARTOPEN, reducer, init } from "./reducer";
 
 export default App;
+
+export const DispatchContext = createContext(init);
 
 const calcSum = function (arr) {
   console.log("render calcSum in App");
@@ -45,12 +47,8 @@ function App() {
     }
   }, [state.order, totalSumMemoized]);
 
-  const handleOpenCart = () => {
-    dispatch({ type: ISCARTOPEN, payload: !state.isCartOpen });
-  };
-
   return (
-    <>
+    <DispatchContext.Provider value={{ state, dispatch }}>
       <Header handleOpenCart={handleOpenCart} order={state.order} />
       <ExplanationSection />
       <Lists>
@@ -60,18 +58,10 @@ function App() {
             title={item.title}
             description={item.description}
             price={Number(item.price)}
-            order={state.order}
-            setOrder={(newOrder) =>
-              dispatch({ type: ORDER, payload: newOrder })
-            }
           />
         ))}
       </Lists>
-      <Cart
-        isOpen={state.isCartOpen}
-        closeCart={handleOpenCart}
-        totalSum={state.totalSum}
-      >
+      <Cart totalSum={state.totalSum}>
         {state.order.length > 0 ? (
           state.order.map((item) => (
             <ProductPopup
@@ -80,16 +70,12 @@ function App() {
               description={item.description}
               price={item.price}
               amount={item.amount}
-              order={state.order}
-              setOrder={(newOrder) =>
-                dispatch({ type: ORDER, payload: newOrder })
-              }
             />
           ))
         ) : (
           <div style={{ fontSize: "2rem" }}>Корзина пуста</div>
         )}
       </Cart>
-    </>
+    </DispatchContext.Provider>
   );
 }

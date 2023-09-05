@@ -1,8 +1,10 @@
 import styles from "./Product.module.css";
-import React, { useState } from "react";
-import { createOrder } from "../../api.ts";
+import React, { useContext, useState } from "react";
+import { DispatchContext } from "../../App";
+import { ORDER } from "../../reducer";
 
-const Product = ({ title, description, price, order, setOrder }) => {
+const Product = ({ title, description, price }) => {
+  const { state, dispatch } = useContext(DispatchContext);
   const [input, setInput] = useState("");
 
   const handleInput = (e) => {
@@ -10,21 +12,23 @@ const Product = ({ title, description, price, order, setOrder }) => {
   };
 
   const handleOrder = () => {
-    const isExisting = order.find((item) => item.title === title);
+    const isExisting = state.order.find((item) => item.title === title);
 
     if (isExisting) {
-      const updateOrder = order.map((item) =>
+      const updateOrder = state.order.map((item) =>
         item.title === title
           ? { ...item, amount: item.amount + Number(input) }
           : item,
       );
-      setOrder(updateOrder);
+      dispatch({ type: ORDER, payload: updateOrder });
     } else {
-      //createOrder({ title, description, price, amount: Number(input) });
-      setOrder([
-        ...order,
-        { title, description, price, amount: Number(input) },
-      ]);
+      dispatch({
+        type: ORDER,
+        payload: [
+          ...state.order,
+          { title, description, price, amount: Number(input) },
+        ],
+      });
     }
     setInput("");
   };

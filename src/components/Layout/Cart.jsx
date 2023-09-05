@@ -1,17 +1,30 @@
 import styles from "./Cart.module.css";
+import { useContext } from "react";
+import { DispatchContext } from "../../App";
+import { ISCARTOPEN } from "../../reducer";
 
-const Cart = ({ isOpen, closeCart, children, totalSum }) => {
-  if (!isOpen) {
+const Cart = ({ children, totalSum }) => {
+  const { state, dispatch } = useContext(DispatchContext);
+
+  if (!state.isCartOpen) {
     return null;
   }
 
   return (
-    <div className={styles["cart-overlay"]} onClick={closeCart}>
+    <div
+      className={styles["cart-overlay"]}
+      onClick={() => dispatch({ type: ISCARTOPEN, payload: !state.isCartOpen })}
+    >
       <div
         className={styles["cart-content"]}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className={styles["cart__close-button"]} onClick={closeCart}>
+        <button
+          className={styles["cart__close-button"]}
+          onClick={() =>
+            dispatch({ type: ISCARTOPEN, payload: !state.isCartOpen })
+          }
+        >
           ✖
         </button>
         {children}

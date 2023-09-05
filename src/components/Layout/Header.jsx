@@ -1,6 +1,9 @@
 import styles from "./Header.module.css";
+import { useContext } from "react";
+import { DispatchContext } from "../../App";
 
 const Header = ({ handleOpenCart, order }) => {
+  const { dispatch } = useContext(DispatchContext);
   const sumOrders = () => {
     if (order.length === 0) return 0;
     return order.reduce((acc, item) => (acc += item.amount), 0);
