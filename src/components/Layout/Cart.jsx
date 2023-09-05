@@ -16,7 +16,10 @@ const Cart = ({ isOpen, closeCart, children, totalSum }) => {
         </button>
         {children}
         {Array.isArray(children) && (
-          <p className={styles["cart-sum"]}>Итого: {totalSum} $</p>
+          <div className={styles["cart-total"]}>
+            <p className={styles["cart-sum"]}>Итого: {totalSum} $</p>
+            <button className={styles["cart-button"]}>Заказать</button>
+          </div>
         )}
       </div>
     </div>

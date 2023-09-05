@@ -1,5 +1,6 @@
 import styles from "./Product.module.css";
 import React, { useState } from "react";
+import { createOrder } from "../../api.ts";
 
 const Product = ({ title, description, price, order, setOrder }) => {
   const [input, setInput] = useState("");
@@ -19,6 +20,7 @@ const Product = ({ title, description, price, order, setOrder }) => {
       );
       setOrder(updateOrder);
     } else {
+      //createOrder({ title, description, price, amount: Number(input) });
       setOrder([
         ...order,
         { title, description, price, amount: Number(input) },

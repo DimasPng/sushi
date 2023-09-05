@@ -2,11 +2,13 @@ import "./App.css";
 import Header from "./components/Layout/Header";
 import ExplanationSection from "./components/Layout/ExplanationSection";
 import Lists from "./components/Layout/Lists";
-import { productsData } from "./data/data.js";
 import Product from "./components/Layout/Product";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 import Cart from "./components/Layout/Cart";
 import ProductPopup from "./components/Layout/ProductPopup";
+import { getMeals } from "./api.ts";
+import { ORDER, TOTAL_SUM, MEALS, ISCARTOPEN, reducer, init } from "./reducer";
+
 export default App;
 
 const calcSum = function (arr) {
@@ -17,48 +19,71 @@ const calcSum = function (arr) {
 };
 
 function App() {
-  const [order, setOrder] = useState([]);
-  const [totalSum, setTotalSum] = useState(0);
+  const [state, dispatch] = useReducer(
+    reducer,
+    {
+      order: [],
+      totalSum: 0,
+      meals: [],
+      isCartOpen: false,
+    },
+    init,
+  );
 
   useEffect(() => {
-    if (order.length > 0) {
-      setTotalSum(calcSum(order));
-    }
-  }, [order]);
+    (async () => {
+      const meals = await getMeals();
+      dispatch({ type: MEALS, payload: meals });
+    })();
+  }, []);
 
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const totalSumMemoized = useMemo(() => calcSum(state.order), [state.order]);
+
+  useEffect(() => {
+    if (state.order.length > 0) {
+      dispatch({ type: TOTAL_SUM, payload: totalSumMemoized });
+    }
+  }, [state.order, totalSumMemoized]);
 
   const handleOpenCart = () => {
-    setIsCartOpen(!isCartOpen);
+    dispatch({ type: ISCARTOPEN, payload: !state.isCartOpen });
   };
 
   return (
     <>
-      <Header handleOpenCart={handleOpenCart} order={order} />
+      <Header handleOpenCart={handleOpenCart} order={state.order} />
       <ExplanationSection />
       <Lists>
-        {productsData.map((item) => (
+        {state.meals.map((item) => (
           <Product
             key={item.id}
             title={item.title}
             description={item.description}
             price={Number(item.price)}
-            order={order}
-            setOrder={setOrder}
+            order={state.order}
+            setOrder={(newOrder) =>
+              dispatch({ type: ORDER, payload: newOrder })
+            }
           />
         ))}
       </Lists>
-      <Cart isOpen={isCartOpen} closeCart={handleOpenCart} totalSum={totalSum}>
-        {order.length > 0 ? (
-          order.map((item) => (
+      <Cart
+        isOpen={state.isCartOpen}
+        closeCart={handleOpenCart}
+        totalSum={state.totalSum}
+      >
+        {state.order.length > 0 ? (
+          state.order.map((item) => (
             <ProductPopup
               key={item.title}
               title={item.title}
               description={item.description}
               price={item.price}
               amount={item.amount}
-              order={order}
-              setOrder={setOrder}
+              order={state.order}
+              setOrder={(newOrder) =>
+                dispatch({ type: ORDER, payload: newOrder })
+              }
             />
           ))
         ) : (
