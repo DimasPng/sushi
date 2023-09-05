@@ -7,7 +7,7 @@ import { createContext, useEffect, useMemo, useReducer } from "react";
 import Cart from "./components/Layout/Cart";
 import ProductPopup from "./components/Layout/ProductPopup";
 import { getMeals } from "./api.ts";
-import { ORDER, TOTAL_SUM, MEALS, ISCARTOPEN, reducer, init } from "./reducer";
+import { TOTAL_SUM, MEALS, reducer, init } from "./reducer";
 
 export default App;
 
@@ -49,7 +49,7 @@ function App() {
 
   return (
     <DispatchContext.Provider value={{ state, dispatch }}>
-      <Header handleOpenCart={handleOpenCart} order={state.order} />
+      <Header />
       <ExplanationSection />
       <Lists>
         {state.meals.map((item) => (
